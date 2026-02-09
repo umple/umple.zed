@@ -1,0 +1,10 @@
+name = "Umple"
+grammar = "umple"
+path_suffixes = ["ump"]
+line_comments = ["// "]
+block_comment = ["/* ", " */"]
+brackets = [
+  { start = "{", end = "}", close = true, newline = true },
+  { start = "[", end = "]", close = true, newline = false },
+  { start = "(", end = ")", close = true, newline = false },
+]

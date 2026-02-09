@@ -1,0 +1,16 @@
+id = "umple"
+name = "Umple"
+version = "0.0.1"
+schema_version = 1
+authors = ["DraftTin"]
+description = "Umple language support: syntax highlighting, diagnostics, completion, go-to-definition"
+repository = "https://github.com/DraftTin/umple.zed"
+
+[grammars.umple]
+repository = "https://github.com/DraftTin/umple-lsp"
+rev = "09a1b254b4d43eeae0087141864d72a68c217d2b"
+path = "packages/tree-sitter-umple"
+
+[language_servers.umple-lsp]
+name = "Umple LSP"
+languages = ["Umple"]
