@@ -9,7 +9,7 @@ Umple language support for the [Zed](https://zed.dev) editor, providing syntax h
 - **umple-lsp** cloned and built locally:
 
 ```bash
-git clone https://github.com/DraftTin/umple-lsp.git
+git clone https://github.com/umple/umple-lsp.git
 cd umple-lsp
 npm install
 npm run compile

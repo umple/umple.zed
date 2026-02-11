@@ -2,12 +2,12 @@ id = "umple"
 name = "Umple"
 version = "0.0.1"
 schema_version = 1
-authors = ["DraftTin"]
+authors = ["umple"]
 description = "Umple language support: syntax highlighting, diagnostics, completion, go-to-definition"
-repository = "https://github.com/DraftTin/umple.zed"
+repository = "https://github.com/umple/umple.zed"
 
 [grammars.umple]
-repository = "https://github.com/DraftTin/umple-lsp"
+repository = "https://github.com/umple/umple-lsp"
 rev = "09a1b254b4d43eeae0087141864d72a68c217d2b"
 path = "packages/tree-sitter-umple"
 
