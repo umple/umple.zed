@@ -4,11 +4,18 @@ Umple language support for the [Zed](https://zed.dev) editor, providing syntax h
 
 ## Installation
 
-### From Extensions Marketplace
+The extension is not yet available on the Zed marketplace. For now, install it manually as a dev extension:
 
-Search for "Umple" in Zed's extension browser (`Extensions` panel).
+1. Clone this repo:
+   ```bash
+   git clone https://github.com/umple/umple.zed.git
+   ```
 
-The extension automatically downloads the LSP server and Umple compiler — no manual setup required.
+2. In Zed, open the command palette (`Cmd+Shift+P`) and run **zed: install dev extension**
+
+3. Select the `umple.zed` directory
+
+The extension automatically downloads the LSP server and Umple compiler — no manual setup required beyond the clone.
 
 ### Prerequisites
 
@@ -45,6 +52,17 @@ For development, you can override the auto-downloaded server with a local build.
 ```
 
 This points to a locally cloned and built [umple-lsp](https://github.com/umple/umple-lsp) repository.
+
+## Updating
+
+Since this is installed as a dev extension, pull the latest changes and Zed will pick them up:
+
+```bash
+cd umple.zed
+git pull
+```
+
+Then restart Zed or reload the extension.
 
 ## License
 
