@@ -38,6 +38,25 @@ The extension automatically installs [`umple-lsp-server`](https://www.npmjs.com/
 
 ## Configuration (optional)
 
+You can adjust certain settings using Settings ... / Open Settings (cmd ,) or by editing the `settings.json` file.
+
+### Configuration settings for users
+
+By default lines of Umple code that have errors or warnings are underlined; you can see the error or warning at the bottom of the screen if you click on the underlined text.
+
+However, if you would like such messages from the Umple compiler to appear inline (on the line where each problem occurs), then you can change the Languages & Tools / Diagnostics / Enabled setting to be true. You can also do this by adding the following to the settings.json file.
+
+```
+{
+  "diagnostics": {
+    "inline": {
+      "enabled": true
+    }
+  }
+}
+```
+
+### Configuration settings for developers working on the Umple LSP server
 For development, you can override the auto-downloaded server with a local build. Add to your Zed `settings.json` (`Cmd+,`):
 
 ```json
