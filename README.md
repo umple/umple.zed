@@ -19,7 +19,7 @@ The extension automatically downloads the LSP server and Umple compiler — no m
 
 ### Prerequisites
 
-- **Rust** (via [rustup](https://rustup.rs/), not Homebrew — needed to compile the dev extension)
+- **Rust** (via [rustup](https://rustup.rs/), not Homebrew rust — needed to compile the dev extension)
 - **Node.js** 18+ (for running the LSP server)
 - **Java** 11+ (optional — needed for diagnostics from the Umple compiler)
 
@@ -94,14 +94,16 @@ Zed compiles extensions to WebAssembly (`wasm32-wasip2`), which requires the Rus
 # Remove Homebrew rust if installed
 brew uninstall rust
 
-# Install via [rustup](https://rustup.rs/)
+brew install rustup
+# Or install rustup directly via [rustup](https://rustup.rs/)
 ```
 
 ### LSP server not starting
 
 Check **View > Toggle Language Server Logs** in Zed for errors. Common issues:
-- Node.js not found: Install Node.js 18+ and ensure it's on your PATH
-- npm install failed: Check internet connection, restart Zed to retry
+
+- **Node.js not found:** Install Node.js 18+ and ensure it's on your PATH
+- **npm install failed:** Check internet connection, restart Zed to retry
 
 ### No diagnostics
 
