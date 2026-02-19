@@ -28,7 +28,7 @@ The extension automatically downloads the LSP server and Umple compiler — no m
 - **Syntax highlighting** via tree-sitter grammar
 - **Diagnostics** from UmpleSync compiler
 - **Code completion** with context-aware keyword suggestions
-- **Go-to-definition** for classes, interfaces, traits, enums, attributes, methods, state machines, and `use` statements
+- **Go-to-definition** for classes, interfaces, traits, enums, attributes, methods, state machines, states, associations, mixsets, requirements, and `use` statements
 - **Outline view** showing classes, methods, state machines, and more
 - **Auto-indentation** for blocks
 
