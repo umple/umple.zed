@@ -29,15 +29,13 @@ impl zed::Extension for UmpleExtension {
         if let Some(path) = Self::server_path_from_settings(&lsp_settings) {
             let server_js = format!("{path}/packages/server/out/server.js");
             let node = Self::resolve_node(worktree)?;
-            return Ok(zed::Command::new(&node)
-                .arg(&server_js)
-                .arg("--stdio"));
+            return Ok(zed::Command::new(&node).arg(&server_js).arg("--stdio"));
         }
 
         // Auto-download path
         let server_path = self.server_script_path(language_server_id)?;
-        let node = zed::node_binary_path()
-            .map_err(|e| format!("could not find node binary: {e}"))?;
+        let node =
+            zed::node_binary_path().map_err(|e| format!("could not find node binary: {e}"))?;
 
         Ok(zed::Command::new(&node)
             .arg(
@@ -83,12 +81,8 @@ impl UmpleExtension {
         std::fs::metadata(SERVER_PATH).map_or(false, |stat| stat.is_file())
     }
 
-    fn server_script_path(
-        &mut self,
-        language_server_id: &LanguageServerId,
-    ) -> Result<String> {
+    fn server_script_path(&mut self, language_server_id: &LanguageServerId) -> Result<String> {
         let server_exists = self.server_exists();
-
         if self.did_find_server && server_exists {
             self.download_jar_if_needed();
             return Ok(SERVER_PATH.to_string());
@@ -131,8 +125,14 @@ impl UmpleExtension {
 
     fn download_jar_if_needed(&self) {
         if std::fs::metadata(JAR_PATH).map_or(true, |stat| !stat.is_file()) {
-            // Best-effort: diagnostics will be disabled if this fails
-            let _ = zed::download_file(JAR_URL, JAR_PATH, zed::DownloadedFileType::Uncompressed);
+            // Best-effort: try up to 3 times. Diagnostics will be disabled if all fail.
+            for _ in 1..=3 {
+                if zed::download_file(JAR_URL, JAR_PATH, zed::DownloadedFileType::Uncompressed)
+                    .is_ok()
+                {
+                    return;
+                }
+            }
         }
     }
 
