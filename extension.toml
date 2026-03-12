@@ -8,7 +8,7 @@ repository = "https://github.com/umple/umple.zed"
 
 [grammars.umple]
 repository = "https://github.com/umple/umple-lsp"
-rev = "f6f1c0be32a1c57e9b571dd633e09ffdab322c8b"
+rev = "3f7b41581c6788186388ad8d79dc3f58ea8ae583"
 path = "packages/tree-sitter-umple"
 
 [language_servers.umple-lsp]

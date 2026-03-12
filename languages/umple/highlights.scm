@@ -25,7 +25,45 @@
   "generate"
 ] @keyword.import
 
+[
+  "filter"
+  "include"
+  "includeFilter"
+  "hops"
+  "super"
+  "sub"
+] @keyword.directive
+
+(filter_definition
+  name: (filter_name (integer_literal) @number))
+
+(filter_definition
+  name: (filter_name (identifier) @variable))
+
+(filter_combined_value
+  (filter_name (integer_literal) @number))
+
+(filter_combined_value
+  (filter_name (identifier) @variable))
+
+(filter_value
+  (filter_pattern) @string.special)
+
+(filter_namespace_stmt
+  (qualified_name) @module)
+
+(filter_hop_super
+  (integer_literal) @number)
+
+(filter_hop_sub
+  (integer_literal) @number)
+
+(filter_hop_association
+  (integer_literal) @number)
+
 (generate_statement language: _ @string.special)
+
+(code_lang) @string.special
 
 [
   "--override"
@@ -37,7 +75,13 @@
 [
   "isA"
   "implementsReq"
+  "isFeature"
 ] @keyword.modifier
+
+[
+  "require"
+  "subfeature"
+] @keyword.directive
 
 [
   "abstract"
@@ -72,7 +116,18 @@
   "entry"
   "exit"
   "do"
+  "active"
+  "final"
+  "trace"
+  "tracecase"
+  "activate"
+  "deactivate"
 ] @keyword
+
+; Trace postfix sub-keywords (children of trace_postfix, not trace_statement)
+(trace_postfix ["where" "until" "after" "giving" "record"] @keyword)
+; activate/deactivate modifiers (direct children of trace_statement)
+(trace_statement ["onAllObjects" "onThisThreadOnly" "onThisObject"] @keyword)
 
 [
   "new"
@@ -101,6 +156,9 @@
 (enum_definition
   name: (identifier) @type.definition)
 
+(enum_value
+  name: (identifier) @constant)
+
 (external_definition
   name: (identifier) @type.definition)
 
@@ -123,6 +181,10 @@
   (type_list
     (type_name) @type))
 
+(trait_binding
+  param: (identifier) @variable
+  value: (qualified_name) @type)
+
 ; Built-in types
 ((identifier) @type.builtin
   (#any-of? @type.builtin
@@ -143,6 +205,9 @@
   name: (identifier) @function)
 
 (method_signature
+  name: (identifier) @function)
+
+(trait_method_signature
   name: (identifier) @function)
 
 (event_spec
@@ -195,7 +260,7 @@
   name: (identifier) @constant)
 
 (transition
-  target: (identifier) @constant)
+  target: (qualified_name (identifier) @constant))
 
 ; Standalone transition states
 (standalone_transition
@@ -321,3 +386,12 @@
 ; =============
 
 (constraint) @string.special
+
+; Named invariant label: [myInvariant: expr]
+(constraint_name (identifier) @property)
+
+; =============
+; REQUIRE STATEMENT
+; =============
+
+(require_body) @string.special
