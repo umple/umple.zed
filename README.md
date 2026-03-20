@@ -29,7 +29,12 @@ The extension automatically downloads the LSP server and Umple compiler — no m
 - **Diagnostics** from UmpleSync compiler
 - **Code completion** with context-aware keyword suggestions
 - **Go-to-definition** for classes, interfaces, traits, enums, attributes, methods, state machines, states, associations, mixsets, requirements, and `use` statements
+- **Find references** across all reachable files with state-path disambiguation
+- **Rename** safe symbol rename across all references
+- **Hover** contextual information for symbols
+- **Formatting** AST-driven indent correction, arrow spacing, blank-line normalization
 - **Outline view** showing classes, methods, state machines, and more
+- **Cross-file support** transitive `use` statement resolution and cross-file diagnostics
 - **Auto-indentation** for blocks
 
 ## How It Works
