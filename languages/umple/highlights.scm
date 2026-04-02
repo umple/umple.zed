@@ -87,6 +87,7 @@
   "abstract"
   "static"
   "const"
+  "constant"
   "lazy"
   "settable"
   "internal"
@@ -109,6 +110,9 @@
   "before"
   "after"
   "around"
+  "custom"
+  "generated"
+  "all"
   "emit"
 ] @keyword.directive
 
@@ -119,13 +123,23 @@
   "active"
   "final"
   "trace"
+  "tracer"
   "tracecase"
+  "suboption"
+  "distributable"
+  "test"
+  "generic"
   "activate"
   "deactivate"
 ] @keyword
 
 ; Trace postfix sub-keywords (children of trace_postfix, not trace_statement)
-(trace_postfix ["where" "until" "after" "giving" "record"] @keyword)
+; Trace prefix keywords (children of trace_statement)
+(trace_statement ["set" "get" "in" "out" "entry" "exit" "cardinality" "add" "remove"] @keyword)
+(trace_postfix ["where" "until" "after" "giving" "record" "logLevel" "for"] @keyword)
+(trace_postfix ["trace" "debug" "info" "warn" "error" "fatal" "all" "finest" "fine" "config" "warning" "severe"] @constant)
+; Tracer directive type
+(tracer_directive type: (identifier) @type)
 ; activate/deactivate modifiers (direct children of trace_statement)
 (trace_statement ["onAllObjects" "onThisThreadOnly" "onThisObject"] @keyword)
 
@@ -187,7 +201,7 @@
 
 ; Trait SM binding: highlight only (value is visual approximation, not semantic type)
 (trait_sm_binding
-  param: (identifier) @variable.member
+  param: (qualified_name) @variable.member
   value: (qualified_name) @type)
 
 ; Built-in types
