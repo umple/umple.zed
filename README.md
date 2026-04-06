@@ -89,6 +89,27 @@ git pull
 
 Then restart Zed or reload the extension.
 
+## Grammar Sync
+
+The tree-sitter grammar and query files are derived from [umple-lsp](https://github.com/umple/umple-lsp). The following files are auto-synced and should not be edited manually:
+
+- `extension.toml` `[grammars.umple].rev` — pinned commit for `parser.c`
+- `languages/umple/highlights.scm` — copied from `umple-lsp/packages/tree-sitter-umple/queries/`
+
+### Syncing after grammar changes
+
+```bash
+./scripts/sync-grammar.sh --source /path/to/umple-lsp
+```
+
+### Checking for drift (CI or local)
+
+```bash
+./scripts/sync-grammar.sh --source /path/to/umple-lsp --check
+```
+
+This exits with code 1 if any synced file is out of date.
+
 ## Troubleshooting
 
 ### Extension fails to compile ("failed to compile Rust extension")

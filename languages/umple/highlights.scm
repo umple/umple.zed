@@ -1,3 +1,6 @@
+; Auto-synced from umple-lsp @ d5a2311da0cb
+; Source: packages/tree-sitter-umple/queries/highlights.scm
+; Do not edit manually — run scripts/sync-grammar.sh instead
 ; Tree-sitter highlight queries for Umple
 ; Only uses node types that exist in the grammar
 

@@ -1,0 +1,22 @@
+name: Check grammar sync
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  check-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clone umple-lsp at pinned rev
+        run: |
+          REV=$(grep 'rev = ' extension.toml | sed 's/.*rev = "\(.*\)"/\1/')
+          git clone --depth 1 https://github.com/umple/umple-lsp.git /tmp/umple-lsp
+          cd /tmp/umple-lsp && git fetch origin "$REV" && git checkout "$REV"
+
+      - name: Check for drift
+        run: ./scripts/sync-grammar.sh --source /tmp/umple-lsp --check
