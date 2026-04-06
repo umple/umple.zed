@@ -28,7 +28,7 @@ impl zed::Extension for UmpleExtension {
         // Allow developers to override with a manual serverPath
         if let Some(path) = Self::server_path_from_settings(&lsp_settings) {
             let server_js = format!("{path}/packages/server/out/server.js");
-            let node = Self::resolve_node(worktree)?;
+            let node = Self::resolve_node()?;
             return Ok(zed::Command::new(&node).arg(&server_js).arg("--stdio"));
         }
 
@@ -154,10 +154,7 @@ impl UmpleExtension {
         None
     }
 
-    fn resolve_node(worktree: &zed::Worktree) -> Result<String> {
-        if let Some(node) = worktree.which("node") {
-            return Ok(node);
-        }
+    fn resolve_node() -> Result<String> {
         zed::node_binary_path().map_err(|e| format!("could not find node binary: {e}"))
     }
 }
