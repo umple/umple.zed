@@ -4,7 +4,16 @@ Umple language support for the [Zed](https://zed.dev) editor, providing syntax h
 
 ## Installation
 
-The extension is not yet available on the Zed marketplace. For now, install it manually as a dev extension:
+The extension is available on the Zed marketplace. Install it from Zed:
+
+1. Open the command palette (`Cmd+Shift+P`) and run **zed: extensions**
+2. Search for **Umple** and click Install
+
+The extension automatically downloads the LSP server and Umple compiler — no manual setup required.
+
+### Dev install (from source)
+
+To work on the extension itself, install it as a dev extension:
 
 1. Clone this repo:
    ```bash
@@ -14,8 +23,6 @@ The extension is not yet available on the Zed marketplace. For now, install it m
 2. In Zed, open the command palette (`Cmd+Shift+P`) and run **zed: install dev extension**
 
 3. Select the `umple.zed` directory
-
-The extension automatically downloads the LSP server and Umple compiler — no manual setup required beyond the clone.
 
 ### Prerequisites
 
