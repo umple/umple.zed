@@ -1,10 +1,19 @@
 use std::env;
-use zed_extension_api::{self as zed, serde_json, settings::LspSettings, LanguageServerId, Result};
+use zed_extension_api::{
+    self as zed,
+    http_client::{HttpMethod, HttpRequest, RedirectPolicy},
+    serde_json,
+    settings::LspSettings,
+    LanguageServerId, Result,
+};
 
 const PACKAGE_NAME: &str = "umple-lsp-server";
 const SERVER_PATH: &str = "node_modules/umple-lsp-server/out/server.js";
 const JAR_URL: &str = "https://try.umple.org/scripts/umplesync.jar";
 const JAR_PATH: &str = "umplesync.jar";
+const JAR_VERSION_URL: &str =
+    "https://cruise.umple.org/umpleonline/scripts/versionRunning.txt";
+const JAR_VERSION_CACHE: &str = "umplesync.jar.version";
 
 struct UmpleExtension {
     did_find_server: bool,
@@ -84,7 +93,7 @@ impl UmpleExtension {
     fn server_script_path(&mut self, language_server_id: &LanguageServerId) -> Result<String> {
         let server_exists = self.server_exists();
         if self.did_find_server && server_exists {
-            self.download_jar_if_needed();
+            self.refresh_jar_if_stale();
             return Ok(SERVER_PATH.to_string());
         }
 
@@ -118,21 +127,87 @@ impl UmpleExtension {
             }
         }
 
-        self.download_jar_if_needed();
+        self.refresh_jar_if_stale();
         self.did_find_server = true;
         Ok(SERVER_PATH.to_string())
     }
 
-    fn download_jar_if_needed(&self) {
-        if std::fs::metadata(JAR_PATH).map_or(true, |stat| !stat.is_file()) {
-            // Best-effort: try up to 3 times. Diagnostics will be disabled if all fail.
-            for _ in 1..=3 {
-                if zed::download_file(JAR_URL, JAR_PATH, zed::DownloadedFileType::Uncompressed)
-                    .is_ok()
-                {
-                    return;
+    /// Read the cached jar version recorded next to the jar, if any.
+    /// Returns `None` when the cache file is missing, unreadable, or empty.
+    fn read_cached_jar_version() -> Option<String> {
+        let raw = std::fs::read_to_string(JAR_VERSION_CACHE).ok()?;
+        let trimmed = raw.trim();
+        if trimmed.is_empty() {
+            None
+        } else {
+            Some(trimmed.to_string())
+        }
+    }
+
+    /// Fetch the current jar version string from the Umple version endpoint.
+    /// Returns `None` on any network or parse failure — callers must treat
+    /// this as "check skipped, keep existing jar" (fail-open).
+    fn fetch_remote_jar_version() -> Option<String> {
+        let req = HttpRequest::builder()
+            .method(HttpMethod::Get)
+            .url(JAR_VERSION_URL)
+            .redirect_policy(RedirectPolicy::FollowAll)
+            .build()
+            .ok()?;
+        let resp = req.fetch().ok()?;
+        let body = String::from_utf8(resp.body).ok()?;
+        let trimmed = body.trim();
+        if trimmed.is_empty() {
+            None
+        } else {
+            Some(trimmed.to_string())
+        }
+    }
+
+    /// Attempt to download the jar, retrying up to 3 times. Returns `true`
+    /// only when `zed::download_file` succeeds this call; does not report on
+    /// whether a pre-existing jar is still in place.
+    fn download_jar(&self) -> bool {
+        for _ in 1..=3 {
+            if zed::download_file(JAR_URL, JAR_PATH, zed::DownloadedFileType::Uncompressed)
+                .is_ok()
+            {
+                return true;
+            }
+        }
+        false
+    }
+
+    /// Ensure the local jar is present and reasonably fresh.
+    ///
+    /// - If the jar is missing, download it unconditionally (same as before).
+    /// - If the jar is present, fetch the remote version string; if it differs
+    ///   from the cached value, re-download. Write the cache only after a
+    ///   successful download so a failed refresh leaves the previous jar (and
+    ///   its recorded version) intact.
+    /// - All network failures are fail-open: keep the existing jar rather
+    ///   than breaking diagnostics.
+    fn refresh_jar_if_stale(&self) {
+        let jar_missing = std::fs::metadata(JAR_PATH).map_or(true, |s| !s.is_file());
+
+        if jar_missing {
+            if self.download_jar() {
+                if let Some(remote) = Self::fetch_remote_jar_version() {
+                    let _ = std::fs::write(JAR_VERSION_CACHE, remote);
                 }
             }
+            return;
+        }
+
+        let Some(remote) = Self::fetch_remote_jar_version() else {
+            return;
+        };
+        if Self::read_cached_jar_version().as_deref() == Some(remote.as_str()) {
+            return;
+        }
+
+        if self.download_jar() {
+            let _ = std::fs::write(JAR_VERSION_CACHE, remote);
         }
     }
 
