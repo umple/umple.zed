@@ -1,6 +1,6 @@
 id = "umple"
 name = "Umple"
-version = "0.1.0"
+version = "0.1.1"
 schema_version = 1
 authors = ["umple"]
 description = "Umple language support: syntax highlighting, diagnostics, completion, go-to-definition, references, rename, hover, formatting"
