@@ -1,4 +1,4 @@
-; Auto-synced from umple-lsp @ d5a2311da0cb
+; Auto-synced from umple-lsp @ 6df8e03cbdef
 ; Source: packages/tree-sitter-umple/queries/highlights.scm
 ; Do not edit manually — run scripts/sync-grammar.sh instead
 ; Tree-sitter highlight queries for Umple
@@ -35,6 +35,12 @@
   "hops"
   "super"
   "sub"
+  "who"
+  "when"
+  "what"
+  "why"
+  "userStep"
+  "systemResponse"
 ] @keyword.directive
 
 (filter_definition
