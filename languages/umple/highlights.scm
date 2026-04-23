@@ -1,4 +1,4 @@
-; Auto-synced from umple-lsp @ b0604a32b027
+; Auto-synced from umple-lsp @ 757232e4601d
 ; Source: packages/tree-sitter-umple/queries/highlights.scm
 ; Do not edit manually — run scripts/sync-grammar.sh instead
 ; Tree-sitter highlight queries for Umple
