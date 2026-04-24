@@ -27,7 +27,7 @@ To work on the extension itself, install it as a dev extension:
 ### Prerequisites
 
 - **Rust** (via [rustup](https://rustup.rs/), not Homebrew rust — needed to compile the dev extension)
-- **Node.js** 18+ (for running the LSP server)
+- **Node.js** 20+ (for running the LSP server; tested on 20 and 23)
 - **Java** 11+ (optional — needed for diagnostics from the Umple compiler)
 
 ## Features
@@ -87,7 +87,9 @@ This points to a locally cloned and built [umple-lsp](https://github.com/umple/u
 
 ## Updating
 
-Since this is installed as a dev extension, pull the latest changes and Zed will pick them up:
+**Marketplace install:** Zed updates installed extensions automatically. New versions reach you via the Zed Extensions marketplace.
+
+**Dev install (from source):** pull the latest changes and Zed will pick them up:
 
 ```bash
 cd umple.zed
@@ -96,6 +98,8 @@ git pull
 
 Then restart Zed or reload the extension.
 
+The LSP server itself is downloaded from npm at every extension load (via `npm_package_latest_version("umple-lsp-server")`), so server-only changes reach you on the next Zed startup without any extension update needed.
+
 ## Grammar Sync
 
 The tree-sitter grammar and query files are derived from [umple-lsp](https://github.com/umple/umple-lsp). The following files are auto-synced and should not be edited manually:
@@ -103,7 +107,13 @@ The tree-sitter grammar and query files are derived from [umple-lsp](https://git
 - `extension.toml` `[grammars.umple].rev` — pinned commit for `parser.c`
 - `languages/umple/highlights.scm` — copied from `umple-lsp/packages/tree-sitter-umple/queries/`
 
-### Syncing after grammar changes
+### How sync usually happens
+
+A GitHub Action in [`umple/umple-lsp`](https://github.com/umple/umple-lsp/blob/master/.github/workflows/sync-umple-zed.yml) auto-opens (or updates) a PR on this repo whenever grammar or query files change upstream. The PR force-pushes onto a stable branch `sync/umple-lsp-master`, bumps `extension.toml` patch version, and includes a body that classifies the change as `grammar | highlights | both` plus a "safe to merge?" hint. You just merge it.
+
+### Manually syncing (rarely needed)
+
+If the auto-PR workflow is broken or you want to sync ahead of an upstream push:
 
 ```bash
 ./scripts/sync-grammar.sh --source /path/to/umple-lsp
@@ -115,7 +125,7 @@ The tree-sitter grammar and query files are derived from [umple-lsp](https://git
 ./scripts/sync-grammar.sh --source /path/to/umple-lsp --check
 ```
 
-This exits with code 1 if any synced file is out of date.
+This exits with code 1 if any synced file is out of date. The `.github/workflows/check-sync.yml` workflow in this repo runs this on every push/PR to master to catch drift.
 
 ## Troubleshooting
 
