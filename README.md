@@ -32,7 +32,7 @@ To work on the extension itself, install it as a dev extension:
 
 ## Features
 
-- **Syntax highlighting** via tree-sitter grammar
+- **Syntax highlighting** via tree-sitter grammar and highlight queries
 - **Diagnostics** from UmpleSync compiler
 - **Code completion** with context-aware keyword suggestions
 - **Go-to-definition** for classes, interfaces, traits, enums, attributes, methods, state machines, states, associations, mixsets, requirements, and `use` statements
@@ -126,6 +126,25 @@ If the auto-PR workflow is broken or you want to sync ahead of an upstream push:
 ```
 
 This exits with code 1 if any synced file is out of date. The `.github/workflows/check-sync.yml` workflow in this repo runs this on every push/PR to master to catch drift.
+
+## Where to Make Language-Feature Changes
+
+This extension is mainly the Zed wrapper. Core language behavior belongs in `umple-lsp`:
+
+- Diagnostics, completion, hover, go-to-definition, references, rename, formatting, workspace symbols, code actions, and LSP semantic tokens: `umple-lsp/packages/server`
+- Parser and tree-sitter highlighting: `umple-lsp/packages/tree-sitter-umple`
+- Zed extension loading, npm server download, language registration, and grammar pinning: this repo
+
+Zed's visible syntax highlighting comes from the synced tree-sitter highlight query at `languages/umple/highlights.scm`. The LSP server also advertises semantic tokens for clients that use them; those are generated from the upstream `highlights.scm` and mapped in `umple-lsp/packages/server/src/semanticTokens.ts`.
+
+When highlighting changes upstream, prefer the sync workflow or run:
+
+```bash
+./scripts/sync-grammar.sh --source /path/to/umple-lsp --check
+./scripts/sync-grammar.sh --source /path/to/umple-lsp
+```
+
+Change this repo directly only when the Zed wrapper behavior changes or when accepting the generated grammar/highlight sync.
 
 ## Troubleshooting
 
