@@ -45,6 +45,11 @@ To work on the extension itself, install it as a dev extension:
 - **Cross-file support** transitive `use` statement resolution and cross-file diagnostics
 - **Auto-indentation** for blocks
 
+Formatting is provided by the LSP server. It formats parse-clean Umple
+structure, but intentionally does not format embedded target-language method or
+action bodies. Formatter behavior belongs in `umple-lsp/packages/server`; this
+extension should only handle Zed launch/packaging behavior.
+
 ## How It Works
 
 The extension automatically installs [`umple-lsp-server`](https://www.npmjs.com/package/umple-lsp-server) from npm and downloads `umplesync.jar` for compiler diagnostics. The server is launched via Node.js in `--stdio` mode.
