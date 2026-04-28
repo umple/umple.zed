@@ -1,6 +1,6 @@
 # Umple for Zed
 
-Umple language support for the [Zed](https://zed.dev) editor, providing syntax highlighting, diagnostics, code completion, and go-to-definition for `.ump` files.
+Umple language support for the [Zed](https://zed.dev) editor, providing syntax highlighting, diagnostics, code completion, inlay hints, and go-to-definition for `.ump` files.
 
 ## Installation
 
@@ -39,6 +39,7 @@ To work on the extension itself, install it as a dev extension:
 - **Find references** across all reachable files with state-path disambiguation
 - **Rename** safe symbol rename across all references
 - **Hover** contextual information for symbols
+- **Inlay hints** editor-only inferred type annotations for untyped attributes when Zed renders LSP inlay hints
 - **Formatting** AST-driven indent correction, arrow spacing, blank-line normalization
 - **Outline view** showing classes, methods, state machines, and more
 - **Cross-file support** transitive `use` statement resolution and cross-file diagnostics
@@ -131,7 +132,7 @@ This exits with code 1 if any synced file is out of date. The `.github/workflows
 
 This extension is mainly the Zed wrapper. Core language behavior belongs in `umple-lsp`:
 
-- Diagnostics, completion, hover, go-to-definition, references, rename, formatting, workspace symbols, code actions, and LSP semantic tokens: `umple-lsp/packages/server`
+- Diagnostics, completion, hover, inlay hints, go-to-definition, references, rename, formatting, workspace symbols, code actions, and LSP semantic tokens: `umple-lsp/packages/server`
 - Parser and tree-sitter highlighting: `umple-lsp/packages/tree-sitter-umple`
 - Zed extension loading, npm server download, language registration, and grammar pinning: this repo
 

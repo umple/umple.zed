@@ -3,7 +3,7 @@ name = "Umple"
 version = "0.1.4"
 schema_version = 1
 authors = ["umple"]
-description = "Umple language support: syntax highlighting, diagnostics, completion, go-to-definition, references, rename, hover, formatting"
+description = "Umple language support: syntax highlighting, diagnostics, completion, inlay hints, go-to-definition, references, rename, hover, formatting"
 repository = "https://github.com/umple/umple.zed"
 
 [grammars.umple]
