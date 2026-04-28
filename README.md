@@ -46,9 +46,10 @@ To work on the extension itself, install it as a dev extension:
 - **Auto-indentation** for blocks
 
 Formatting is provided by the LSP server. It formats parse-clean Umple
-structure, but intentionally does not format embedded target-language method or
-action bodies. Formatter behavior belongs in `umple-lsp/packages/server`; this
-extension should only handle Zed launch/packaging behavior.
+structure, parser-visible structural commas, and already split multi-line list
+indentation, but intentionally does not format embedded target-language method
+or action bodies. Formatter behavior belongs in `umple-lsp/packages/server`;
+this extension should only handle Zed launch/packaging behavior.
 
 ## How It Works
 
