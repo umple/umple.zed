@@ -40,7 +40,7 @@ To work on the extension itself, install it as a dev extension:
 - **Rename** safe symbol rename across all references
 - **Hover** contextual information for symbols
 - **Inlay hints** editor-only inferred type annotations for untyped attributes when Zed renders LSP inlay hints
-- **Formatting** AST-driven indent correction, arrow spacing, blank-line normalization
+- **Formatting** AST-driven indent correction, arrow spacing, declaration assignment spacing, blank-line normalization
 - **Outline view** showing classes, methods, state machines, and more
 - **Cross-file support** transitive `use` statement resolution and cross-file diagnostics
 - **Auto-indentation** for blocks
