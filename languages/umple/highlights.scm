@@ -1,4 +1,4 @@
-; Auto-synced from umple-lsp @ 757232e4601d
+; Auto-synced from umple-lsp @ 1bb61e1ea68d
 ; Source: packages/tree-sitter-umple/queries/highlights.scm
 ; Do not edit manually — run scripts/sync-grammar.sh instead
 ; Tree-sitter highlight queries for Umple
@@ -35,6 +35,8 @@
   "hops"
   "super"
   "sub"
+  "strictness"
+  "glossary"
   "who"
   "when"
   "what"
@@ -94,6 +96,7 @@
 
 [
   "abstract"
+  "inner"
   "static"
   "const"
   "constant"
@@ -103,10 +106,29 @@
   "defaulted"
   "immutable"
   "autounique"
+  "ivar"
   "unique"
   "singleton"
   "queued"
   "pooled"
+  "conjugated"
+  "atomic"
+  "synchronous"
+  "intercept"
+  "override"
+  "JUnit"
+  "concrete"
+  "forced"
+  "on"
+  "off"
+  "modelOnly"
+  "noExtraCode"
+  "none"
+  "allow"
+  "ignore"
+  "expect"
+  "disallow"
+  "disable"
 ] @keyword.modifier
 
 [
@@ -137,20 +159,30 @@
   "suboption"
   "distributable"
   "test"
+  "testSequence"
   "generic"
   "activate"
   "deactivate"
+  "position"
+  "position.association"
+  "in"
+  "out"
+  "port"
 ] @keyword
 
 ; Trace postfix sub-keywords (children of trace_postfix, not trace_statement)
 ; Trace prefix keywords (children of trace_statement)
-(trace_statement ["set" "get" "in" "out" "entry" "exit" "cardinality" "add" "remove"] @keyword)
-(trace_postfix ["where" "until" "after" "giving" "record" "logLevel" "for"] @keyword)
-(trace_postfix ["trace" "debug" "info" "warn" "error" "fatal" "all" "finest" "fine" "config" "warning" "severe"] @constant)
+(trace_statement ["set" "get" "onlyGet" "onlySet" "in" "out" "entry" "exit" "cardinality" "add" "remove" "transition"] @keyword)
+(trace_postfix ["where" "until" "after" "giving" "execute" "record" "logLevel" "for" "period" "during"] @keyword)
+(trace_postfix ["trace" "debug" "info" "warn" "error" "fatal" "all" "finest" "finer" "fine" "config" "warning" "severe"] @constant)
+(trace_record_target "only" @keyword)
 ; Tracer directive type
 (tracer_directive type: (identifier) @type)
+(tracer_directive
+  type: (identifier)
+  (identifier) @variable.member)
 ; activate/deactivate modifiers (direct children of trace_statement)
-(trace_statement ["onAllObjects" "onThisThreadOnly" "onThisObject"] @keyword)
+(trace_statement ["onAllObjects" "onThisThreadOnly" "onThisObject" "for"] @keyword)
 
 [
   "new"
@@ -201,7 +233,7 @@
   (qualified_name) @type)
 
 (isa_declaration
-  (type_list
+  (isa_type_list
     (type_name) @type))
 
 (trait_binding
@@ -238,13 +270,23 @@
 (trait_method_signature
   name: (identifier) @function)
 
+(active_method
+  name: (identifier) @function)
+
 (event_spec
   (identifier) @function.method)
 
 (emit_method name: (identifier) @function)
+(test_case name: (identifier) @function)
+(test_sequence name: (identifier) @function)
+(test_sequence_step
+  from: (identifier) @function.method
+  to: (identifier) @function.method)
+(generic_test_case name: (identifier) @function)
 (template_attribute name: (identifier) @variable.member)
 (template_body) @string
-(template_list template_name: (identifier) @variable.member)
+(template_reference template_owner: (identifier) @type)
+(template_reference template_name: (identifier) @variable.member)
 
 ; =============
 ; VARIABLES & PARAMETERS
@@ -258,6 +300,13 @@
 
 (param
   name: (identifier) @variable.parameter)
+
+; Ports
+(port_declaration
+  name: (identifier) @variable.member)
+
+(port_connector
+  (qualified_name (identifier) @variable.member))
 
 ; Key attributes
 (key_definition
@@ -295,6 +344,12 @@
   from_state: (identifier) @constant)
 
 (standalone_transition
+  to_state: (identifier) @constant)
+
+(state_to_state_transition
+  from_state: (identifier) @constant)
+
+(state_to_state_transition
   to_state: (identifier) @constant)
 
 ; =============
@@ -387,11 +442,21 @@
 ; Multiplicity
 (multiplicity) @number
 
+; UmpleOnline layout payloads
+(position_directive
+  (position_number) @number)
+
+(position_association_directive
+  (position_association_payload) @variable.member
+  (position_coordinate_pair) @number)
+
 ; =============
 ; LITERALS
 ; =============
 
 (number) @number
+
+(integer_literal) @number
 
 (string_literal) @string
 
