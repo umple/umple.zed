@@ -1,6 +1,6 @@
 id = "umple"
 name = "Umple"
-version = "0.1.4"
+version = "0.1.5"
 schema_version = 1
 authors = ["umple"]
 description = "Umple language support: syntax highlighting, diagnostics, completion, inlay hints, go-to-definition, references, rename, hover, formatting"
@@ -8,7 +8,7 @@ repository = "https://github.com/umple/umple.zed"
 
 [grammars.umple]
 repository = "https://github.com/umple/umple-lsp"
-rev = "3d36ce3fed987492bb4d44c6acbae98a7f2c3473"
+rev = "1bb61e1ea68d0025584501fa44ca6d77041feda6"
 path = "packages/tree-sitter-umple"
 
 [language_servers.umple-lsp]

@@ -1,4 +1,4 @@
-; Auto-synced from umple-lsp @ 3d36ce3fed98
+; Auto-synced from umple-lsp @ 1bb61e1ea68d
 ; Source: packages/tree-sitter-umple/queries/highlights.scm
 ; Do not edit manually — run scripts/sync-grammar.sh instead
 ; Tree-sitter highlight queries for Umple
@@ -36,6 +36,7 @@
   "super"
   "sub"
   "strictness"
+  "glossary"
   "who"
   "when"
   "what"
@@ -95,6 +96,7 @@
 
 [
   "abstract"
+  "inner"
   "static"
   "const"
   "constant"
@@ -170,16 +172,17 @@
 
 ; Trace postfix sub-keywords (children of trace_postfix, not trace_statement)
 ; Trace prefix keywords (children of trace_statement)
-(trace_statement ["set" "get" "in" "out" "entry" "exit" "cardinality" "add" "remove"] @keyword)
-(trace_postfix ["where" "until" "after" "giving" "execute" "record" "logLevel" "for"] @keyword)
-(trace_postfix ["trace" "debug" "info" "warn" "error" "fatal" "all" "finest" "fine" "config" "warning" "severe"] @constant)
+(trace_statement ["set" "get" "onlyGet" "onlySet" "in" "out" "entry" "exit" "cardinality" "add" "remove" "transition"] @keyword)
+(trace_postfix ["where" "until" "after" "giving" "execute" "record" "logLevel" "for" "period" "during"] @keyword)
+(trace_postfix ["trace" "debug" "info" "warn" "error" "fatal" "all" "finest" "finer" "fine" "config" "warning" "severe"] @constant)
+(trace_record_target "only" @keyword)
 ; Tracer directive type
 (tracer_directive type: (identifier) @type)
 (tracer_directive
   type: (identifier)
   (identifier) @variable.member)
 ; activate/deactivate modifiers (direct children of trace_statement)
-(trace_statement ["onAllObjects" "onThisThreadOnly" "onThisObject"] @keyword)
+(trace_statement ["onAllObjects" "onThisThreadOnly" "onThisObject" "for"] @keyword)
 
 [
   "new"
@@ -282,7 +285,8 @@
 (generic_test_case name: (identifier) @function)
 (template_attribute name: (identifier) @variable.member)
 (template_body) @string
-(template_list template_name: (identifier) @variable.member)
+(template_reference template_owner: (identifier) @type)
+(template_reference template_name: (identifier) @variable.member)
 
 ; =============
 ; VARIABLES & PARAMETERS
@@ -340,6 +344,12 @@
   from_state: (identifier) @constant)
 
 (standalone_transition
+  to_state: (identifier) @constant)
+
+(state_to_state_transition
+  from_state: (identifier) @constant)
+
+(state_to_state_transition
   to_state: (identifier) @constant)
 
 ; =============
